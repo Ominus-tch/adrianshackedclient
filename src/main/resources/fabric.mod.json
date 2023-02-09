@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "adriansmods",
+  "version": "${version}",
+  "name": "Adrian's client",
+  "description": "A simple client for me to integrate my own hacks/mods",
+  "authors": [
+    "Adrian"
+  ],
+
+  "icon": "assets/autofish/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "adrian.hacks.AdriansMod.FabricModAdriansMod"
+    ],
+    "modmenu": [
+      "adrian.hacks.modmenu.AdriansModMenu"
+    ]
+  },
+  "mixins": [
+    "adrians.mixins.json"
+  ],
+
+  "depends": {
+    "fabric": "*"
+  }
+}
