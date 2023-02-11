@@ -13,7 +13,8 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "adrian.hacks.AdriansMod.FabricModAdriansMod"
+      "adrian.hacks.AdriansMod.FabricModAdriansMod",
+      "adrian.hacks.fullbright.GammaUtils"
     ],
     "modmenu": [
       "adrian.hacks.modmenu.AdriansModMenu"

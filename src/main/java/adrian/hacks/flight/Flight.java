@@ -31,15 +31,12 @@ public class Flight {
             boolean backPressed = client.options.backKey.isPressed();
 
             Entity object = client.player;
-            if(client.player.hasVehicle()) {
-                object = client.player.getVehicle();
-            }
 
             Vec3d velocity = object.getVelocity();
             Vec3d newVelocity = new Vec3d(velocity.x, -FALL_SPEED, velocity.z);
             if(jumpPressed) {
                 if(forwardPressed) {
-                    newVelocity = client.player.getRotationVector().multiply(acceleration);
+                    newVelocity = object.getRotationVector().multiply(acceleration);
                 }
                 if(leftPressed && !client.player.hasVehicle()) {
                     newVelocity = client.player.getRotationVector().multiply(acceleration).rotateY(3.1415928F/2);
@@ -63,8 +60,7 @@ public class Flight {
                     acceleration -= 0.2;
                 }
             }
-
-            if(toggle == 0 || newVelocity.y <= -0.04) {
+            if(toggle == 0 || newVelocity.y <= FALL_SPEED) {
                 toggle = 40;
             }
             toggle--;

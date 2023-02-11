@@ -5,8 +5,13 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
+    "BlockMixin",
+    "MixinClientPlayNetworkHandler",
     "MixinFishHookEntity",
-    "MixinClientPlayNetworkHandler"
+    "MixinLightmapTextureManager",
+    "MixinMinecraftClient",
+    "MixinSimpleOption",
+    "MixinStatusEffectUtil"
   ],
   "injectors": {
     "defaultRequire": 1

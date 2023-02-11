@@ -1,6 +1,7 @@
 package adrian.hacks.gui;
 
 import adrian.hacks.AdriansMod.FabricModAdriansMod;
+import adrian.hacks.fullbright.config.FullbrightConfig;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -23,6 +24,8 @@ public class AdriansModsScreenBuilder {
 
         Config defaults = new Config();
         Config config = modHacks.getConfig();
+        FullbrightConfig fullbrightdefaults = new FullbrightConfig();
+        FullbrightConfig fullbrightconfig = modHacks.getFullbrightConfig();
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parentScreen)
@@ -32,10 +35,41 @@ public class AdriansModsScreenBuilder {
                 .setSavingRunnable(() -> {
                     modHacks.getConfig().enforceConstraints();
                     modHacks.getConfigManager().writeConfig(true);
+                    modHacks.getFullbrightConfigManager().writeConfig(true);
                 });
 
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         ConfigCategory configCat = builder.getOrCreateCategory(Text.translatable("options.autofish.config"));
+
+        //Enable Xray Hack
+        AbstractConfigListEntry toggleXrayHack = entryBuilder.startBooleanToggle(Text.translatable("options.xray.enable.title"), config.isXrayEnabled())
+                .setDefaultValue(defaults.isXrayEnabled())
+                .setTooltip(Text.translatable("options.xray.enable.tooltip"))
+                .setSaveConsumer(newValue -> {
+                    modHacks.getConfig().setXrayEnabled(newValue);
+                })
+                .setYesNoTextSupplier(yesNoTextSupplier)
+                .build();
+
+        //Activate Fullbright Hack (Nightvision)
+        AbstractConfigListEntry activateFullbrightNightvisionHack = entryBuilder.startBooleanToggle(Text.translatable("options.fullbright.nightvision.enable.title"), fullbrightconfig.isNightVisionEnabled())
+                .setDefaultValue(fullbrightdefaults.isNightVisionEnabled())
+                .setTooltip(Text.translatable("options.nightvision.fullbright.activate.tooltip"))
+                .setSaveConsumer(newValue -> {
+                    modHacks.getFullbrightConfig().setNightVision(newValue);
+                })
+                .setYesNoTextSupplier(yesNoTextSupplier)
+                .build();
+
+        //Activate Xray Hack
+        AbstractConfigListEntry activateXrayHack = entryBuilder.startBooleanToggle(Text.translatable("options.xray.activate.title"), config.isXrayActive())
+                .setDefaultValue(defaults.isXrayActive())
+                .setTooltip(Text.translatable("options.xray.activate.tooltip"))
+                .setSaveConsumer(newValue -> {
+                    modHacks.getConfig().setXrayActive(newValue);
+                })
+                .setYesNoTextSupplier(yesNoTextSupplier)
+                .build();
 
         //Enable Flight Hack
         AbstractConfigListEntry toggleFlightHack = entryBuilder.startBooleanToggle(Text.translatable("options.flight.enable.title"), config.isFlightHackEnabled())
@@ -43,6 +77,16 @@ public class AdriansModsScreenBuilder {
                 .setTooltip(Text.translatable("options.flight.enable.tooltip"))
                 .setSaveConsumer(newValue -> {
                     modHacks.getConfig().setFlightHackEnabled(newValue);
+                })
+                .setYesNoTextSupplier(yesNoTextSupplier)
+                .build();
+
+        //Enable Boat Flight Hack
+        AbstractConfigListEntry toggleBoatFlightHack = entryBuilder.startBooleanToggle(Text.translatable("options.boatflight.enable.title"), config.isBoatFlightHackEnabled())
+                .setDefaultValue(defaults.isBoatFlightHackEnabled())
+                .setTooltip(Text.translatable("options.boatflight.enable.tooltip"))
+                .setSaveConsumer(newValue -> {
+                    modHacks.getConfig().setBoatFlightHackEnabled(newValue);
                 })
                 .setYesNoTextSupplier(yesNoTextSupplier)
                 .build();
@@ -167,7 +211,17 @@ public class AdriansModsScreenBuilder {
 
         SubCategoryBuilder subCategoryBuilderFlightHack = entryBuilder.startSubCategory(Text.translatable("options.flight.flight.title"));
         subCategoryBuilderFlightHack.add(toggleFlightHack);
+        subCategoryBuilderFlightHack.add(toggleBoatFlightHack);
         subCategoryBuilderFlightHack.setExpanded(true);
+
+        SubCategoryBuilder subCategoryBuilderXrayHack = entryBuilder.startSubCategory(Text.translatable("options.xray.xray.title"));
+        subCategoryBuilderXrayHack.add(toggleXrayHack);
+        subCategoryBuilderXrayHack.add(activateXrayHack);
+        subCategoryBuilderXrayHack.setExpanded(true);
+
+        SubCategoryBuilder subCategoryBuilderFullbrightHack = entryBuilder.startSubCategory(Text.translatable("options.fullbright.fullbright.title"));
+        subCategoryBuilderFullbrightHack.add(activateFullbrightNightvisionHack);
+        subCategoryBuilderFullbrightHack.setExpanded(true);
 
         SubCategoryBuilder subCategoryBuilderAutoFish = entryBuilder.startSubCategory(Text.translatable("options.autofish.autofish.title"));
         subCategoryBuilderAutoFish.add(toggleAutofish);
@@ -180,6 +234,8 @@ public class AdriansModsScreenBuilder {
         subCategoryBuilderAutoFish.add(clearLagRegexField);
         subCategoryBuilderAutoFish.setExpanded(true);
 
+        configCat.addEntry(subCategoryBuilderXrayHack.build());
+        configCat.addEntry(subCategoryBuilderFullbrightHack.build());
         configCat.addEntry(subCategoryBuilderFlightHack.build());
         configCat.addEntry(subCategoryBuilderAutoFish.build());
 

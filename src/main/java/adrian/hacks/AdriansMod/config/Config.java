@@ -1,12 +1,24 @@
 package adrian.hacks.AdriansMod.config;
 
+import adrian.hacks.AdriansMod.FabricModAdriansMod;
+import adrian.hacks.xray.Xray;
 import com.google.gson.annotations.Expose;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+
+import static java.lang.Double.MAX_VALUE;
 
 public class Config {
 
+    int i;
+    MinecraftClient client;
+
     @Expose boolean isFlightHackEnabled = false;
+    @Expose boolean isBoatFlightHackEnabled = false;
     @Expose boolean isAutofishEnabled = false;
-    @Expose boolean isXrayEnabled = true;
+    @Expose boolean isXrayEnabled = false;
+    @Expose boolean isXrayActive = false;
     @Expose boolean multiRod = false;
     @Expose boolean noBreak = false;
     @Expose boolean persistentMode = false;
@@ -19,12 +31,19 @@ public class Config {
         return isFlightHackEnabled;
     }
 
+    public boolean isBoatFlightHackEnabled() {
+        return isBoatFlightHackEnabled;
+    }
+
     public boolean isAutofishEnabled() {
         return isAutofishEnabled;
     }
 
     public boolean isXrayEnabled() {
         return isXrayEnabled;
+    }
+    public boolean isXrayActive() {
+        return isXrayActive;
     }
 
     public boolean isMultiRod() {
@@ -53,17 +72,31 @@ public class Config {
 
     public void setFlightHackEnabled(boolean FlightHackEnabled) { isFlightHackEnabled = FlightHackEnabled; }
 
+    public void setBoatFlightHackEnabled(boolean BoatFlightHackEnabled) { isBoatFlightHackEnabled = BoatFlightHackEnabled; }
+
     public void setXrayEnabled(boolean XrayEnabled) { isXrayEnabled = XrayEnabled; }
+
+    public void updateChunks() {
+        this.client = MinecraftClient.getInstance();
+        if(i==1) {
+            client.options.getViewDistance().setValue(7);
+            i = 0;
+        } else {
+            client.options.getViewDistance().setValue(8);
+            i = 1;
+        }
+    }
+
+    public void setXrayActive(boolean XrayActive) {
+        isXrayActive = XrayActive;
+        updateChunks();
+    }
 
     public void setAutofishEnabled(boolean autofishEnabled) { isAutofishEnabled = autofishEnabled; }
 
-    public void setMultiRod(boolean multiRod) {
-        this.multiRod = multiRod;
-    }
+    public void setMultiRod(boolean multiRod) { this.multiRod = multiRod; }
 
-    public void setNoBreak(boolean noBreak) {
-        this.noBreak = noBreak;
-    }
+    public void setNoBreak(boolean noBreak) { this.noBreak = noBreak; }
 
     public void setPersistentMode(boolean persistentMode) { this.persistentMode = persistentMode; }
 

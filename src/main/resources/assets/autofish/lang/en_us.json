@@ -1,12 +1,28 @@
 {
   "key.adrian's_mod.open_gui": "Open Adrian's GUI",
+  "key.adrian's_mod.activate_xray": "Activate Xray (Enable in menu)",
+  "key.adrian's_mod.enable_flight": "Activate Flight",
+  "key.adrian's_mod.enable_boat_flight": "Activate Boat Flight",
+
   "options.autofish.title": "Adrian's Settings",
 
   "options.hackbutton.toggle.on": "\u00A7aOn",
   "options.hackbutton.toggle.off": "\u00A7eOff",
 
+  "options.xray.enable.title": "Enable Xray",
+  "options.xray.enable.tooltip": "Enables/Disables Xray.",
+
+  "options.xray.activate.title": "Activate Xray",
+  "options.xray.activate.tooltip": "Activates/Deactivates Xray. You can also use the keybind 'X'.",
+
   "options.flight.enable.title": "Enable Flight",
   "options.flight.enable.tooltip": "Toggle's Flight on/off.",
+
+  "options.fullbright.nightvision.enable.title": "Enable nightvision fullbright",
+  "options.nightvision.fullbright.activate.tooltip": "Toggle's Nightvision fullbright on/off.",
+
+  "options.boatflight.enable.title": "Enable Boat Flight",
+  "options.boatflight.enable.tooltip": "Toggle's Boat Flight on/off.",
 
   "options.autofish.enable.title": "Enable Autofish",
   "options.autofish.enable.tooltip": "Toggle's autofishing on/off.",
@@ -56,5 +72,8 @@
   "options.autofish.clear_regex.tooltip_2": "\u00A76This pattern is a \u00A7aRegular Expression\u00A76.",
 
   "options.autofish.autofish.title": "Autofish",
-  "options.flight.flight.title": "Flight"
+  "options.flight.flight.title": "Flight",
+  "options.boat.flight.title": "Boat Flight",
+  "options.xray.xray.title": "Xray",
+  "options.fullbright.fullbright.title": "Fullbright"
 }
