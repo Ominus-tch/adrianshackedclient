@@ -16,6 +16,7 @@ public class Config {
 
     @Expose boolean isFlightHackEnabled = false;
     @Expose boolean isBoatFlightHackEnabled = false;
+    @Expose boolean isNoFallHackEnabled = false;
     @Expose boolean isAutofishEnabled = false;
     @Expose boolean isXrayEnabled = false;
     @Expose boolean isXrayActive = false;
@@ -33,6 +34,10 @@ public class Config {
 
     public boolean isBoatFlightHackEnabled() {
         return isBoatFlightHackEnabled;
+    }
+
+    public boolean isNoFallHackEnabled() {
+        return isNoFallHackEnabled;
     }
 
     public boolean isAutofishEnabled() {

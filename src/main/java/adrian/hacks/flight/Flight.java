@@ -22,48 +22,54 @@ public class Flight {
 
 
     public void tick(MinecraftClient client) {
-
-        if(client.player!=null && modHacks.getConfig().isFlightHackEnabled()) {
-            boolean jumpPressed = client.options.jumpKey.isPressed();
-            boolean forwardPressed = client.options.forwardKey.isPressed();
-            boolean leftPressed = client.options.leftKey.isPressed();
-            boolean rightPressed = client.options.rightKey.isPressed();
-            boolean backPressed = client.options.backKey.isPressed();
-
+        if (client.player!=null) {
             Entity object = client.player;
 
             Vec3d velocity = object.getVelocity();
+
             Vec3d newVelocity = new Vec3d(velocity.x, -FALL_SPEED, velocity.z);
-            if(jumpPressed) {
-                if(forwardPressed) {
-                    newVelocity = object.getRotationVector().multiply(acceleration);
-                }
-                if(leftPressed && !client.player.hasVehicle()) {
-                    newVelocity = client.player.getRotationVector().multiply(acceleration).rotateY(3.1415928F/2);
-                    newVelocity = new Vec3d(newVelocity.x, 0, newVelocity.z);
-                }
-                if(rightPressed && !client.player.hasVehicle()) {
-                    newVelocity = client.player.getRotationVector().multiply(acceleration).rotateY(-3.1415928F/2);
-                    newVelocity = new Vec3d(newVelocity.x, 0, newVelocity.z);
-                }
-                if(backPressed) {
-                    newVelocity = client.player.getRotationVector().negate().multiply(acceleration);
-                }
-
-                newVelocity = new Vec3d(newVelocity.x, (toggle==0 && newVelocity.y>FALL_SPEED ? FALL_SPEED : newVelocity.y), newVelocity.z);
-                object.setVelocity(newVelocity);
-
-                if(forwardPressed || leftPressed || rightPressed || backPressed) {
-                    if(acceleration<MAX_SPEED)
-                        acceleration += 0.1;
-                } else if (acceleration>0.2) {
-                    acceleration -= 0.2;
-                }
+            boolean noFallPressed = modHacks.isNoFallKeyDown();
+            if(noFallPressed) {
+                newVelocity = client.player.getRotationVector().negate().multiply(acceleration);
             }
-            if(toggle == 0 || newVelocity.y <= FALL_SPEED) {
-                toggle = 40;
+            if (client.player != null && modHacks.getConfig().isFlightHackEnabled()) {
+                boolean jumpPressed = client.options.jumpKey.isPressed();
+                boolean forwardPressed = client.options.forwardKey.isPressed();
+                boolean leftPressed = client.options.leftKey.isPressed();
+                boolean rightPressed = client.options.rightKey.isPressed();
+                boolean backPressed = client.options.backKey.isPressed();
+
+                if (jumpPressed) {
+                    if (forwardPressed) {
+                        newVelocity = object.getRotationVector().multiply(acceleration);
+                    }
+                    if (leftPressed && !client.player.hasVehicle()) {
+                        newVelocity = client.player.getRotationVector().multiply(acceleration).rotateY(3.1415928F / 2);
+                        newVelocity = new Vec3d(newVelocity.x, 0, newVelocity.z);
+                    }
+                    if (rightPressed && !client.player.hasVehicle()) {
+                        newVelocity = client.player.getRotationVector().multiply(acceleration).rotateY(-3.1415928F / 2);
+                        newVelocity = new Vec3d(newVelocity.x, 0, newVelocity.z);
+                    }
+                    if (backPressed) {
+                        newVelocity = client.player.getRotationVector().negate().multiply(acceleration);
+                    }
+
+                    newVelocity = new Vec3d(newVelocity.x, (toggle == 0 && newVelocity.y > FALL_SPEED ? FALL_SPEED : newVelocity.y), newVelocity.z);
+                    object.setVelocity(newVelocity);
+
+                    if (forwardPressed || leftPressed || rightPressed || backPressed) {
+                        if (acceleration < MAX_SPEED)
+                            acceleration += 0.1;
+                    } else if (acceleration > 0.2) {
+                        acceleration -= 0.2;
+                    }
+                }
+                if (toggle == 0 || newVelocity.y <= FALL_SPEED) {
+                    toggle = 40;
+                }
+                toggle--;
             }
-            toggle--;
         }
     }
 }

@@ -10,6 +10,7 @@ import adrian.hacks.fullbright.config.FullbrightConfig;
 import adrian.hacks.fullbright.config.FullbrightConfigManager;
 import adrian.hacks.fullbright.statuseffect.StatusEffectManager;
 import adrian.hacks.gui.AdriansModsScreenBuilder;
+import adrian.hacks.stopfall.StopFall;
 import adrian.hacks.xray.Xray;
 
 import net.fabricmc.api.ClientModInitializer;
@@ -33,16 +34,16 @@ public class FabricModAdriansMod implements ClientModInitializer {
     private Flight flight;
     private BoatFlight BoatFlight;
     public Xray xRay;
+    public StopFall stopFall;
 
     private boolean xrayState = false;
     private boolean flightState = false;
     private boolean boatFlightState = false;
-    private boolean fullBrightState = false;
 
     private boolean isXrayKeyDown = false;
     private boolean isFlightKeyDown = false;
     private boolean isBoatFlightKeyDown = false;
-    private boolean isBoatFullbrightKeyDown = false;
+    private boolean isNoFallKeyDown = false;
 
     private Autofish autofish;
     private AutofishScheduler scheduler;
@@ -51,7 +52,7 @@ public class FabricModAdriansMod implements ClientModInitializer {
     private KeyBinding AdriansModXrayKey;
     private KeyBinding AdriansModFlightKey;
     private KeyBinding AdriansModBoatFlightKey;
-    private KeyBinding AdriansModFullbrightKey;
+    private KeyBinding AdriansModNoFallKey;
 
     private ConfigManager configManager;
 
@@ -69,24 +70,20 @@ public class FabricModAdriansMod implements ClientModInitializer {
         this.configManager = new ConfigManager(this);
         this.fullbrightConfigManager = new FullbrightConfigManager(this);
         //this.statusEffectManager = new StatusEffectManager(this);
-        FabricModAdriansMod.LOGGER.info("Xray Enabled: "+getConfig().isXrayEnabled()+" and "+getConfig().isXrayActive());
         //Register Keybinding
         AdriansModGUIKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.adrian's_mod.open_gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "Adrian's mod"));
         AdriansModXrayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.adrian's_mod.activate_xray", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_X, "Adrian's mod"));
         AdriansModFlightKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.adrian's_mod.enable_flight", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "Adrian's mod"));
         AdriansModBoatFlightKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.adrian's_mod.enable_boat_flight", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, "Adrian's mod"));
-        AdriansModFullbrightKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.adrian's_mod.enable_fullbright", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_Y, "Adrian's mod"));
+        AdriansModNoFallKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.adrian's_mod.enable_nofall", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B, "Adrian's mod"));
         //Register Tick Callback
         ClientTickEvents.END_CLIENT_TICK.register(this::tick);
-        //Create Scheduler instance
+        //Create Instances
         this.scheduler = new AutofishScheduler(this);
-        //Create Autofisher instance
         this.autofish = new Autofish(this);
-        //Create Flight instance
         this.flight = new Flight(this);
-        //Create Boat Flight instance
+        this.stopFall = new StopFall(this);
         this.BoatFlight = new BoatFlight(this);
-        //Create xRay instance
         this.xRay = new Xray();
 
         ClientTickEvents.END_CLIENT_TICK.register(this::tick);
@@ -103,6 +100,9 @@ public class FabricModAdriansMod implements ClientModInitializer {
         } else {
             isXrayKeyDown = false;
         }
+
+        isNoFallKeyDown = AdriansModNoFallKey.isPressed();
+
         if (AdriansModFlightKey.isPressed()) {
             if (!isFlightKeyDown) {
                 flightState = !flightState;
@@ -129,6 +129,7 @@ public class FabricModAdriansMod implements ClientModInitializer {
         autofish.tick(client);
         scheduler.tick(client);
 
+        stopFall.tick(client);
         flight.tick(client);
         BoatFlight.tick(client);
     }
@@ -155,6 +156,8 @@ public class FabricModAdriansMod implements ClientModInitializer {
     public void tickFishingLogic(Entity owner, int ticksCatchable) {
         autofish.tickFishingLogic(owner, ticksCatchable);
     }
+
+    public boolean isNoFallKeyDown() { return isNoFallKeyDown; }
 
     public Autofish getAutofish() {
         return autofish;
